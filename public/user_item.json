@@ -1,0 +1,21 @@
+{"total":4,"rows":[
+	{"name":"ПІБ","value":"Юрий","group":"Профиль","editor":"text"},
+	{"name":"email","value":"email@dd.cc","group":"Профиль","editor":{
+		"type":"validatebox",
+		"options":{
+			"validType":"email"
+	}}},
+	{"name":"Администратор","value":"false","group":"Профиль","editor":{
+		"type":"checkbox",
+		"options":{
+			"on":true,
+			"off":false
+		}
+	}},
+	{"name":"Нотатки","value":"","group":"Профиль","editor":{
+		"type":"textbox",
+		"options":{
+			"multiline":true,
+			"height":50
+	}}}
+]}

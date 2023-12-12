@@ -1,0 +1,27 @@
+{"total":11,"rows":[
+	{"name":"ПІБ","value":"Юрий","group":"Послуг зі зберігання","editor":"text"},
+	{"name":"Дод. ПІБ","value":"","group":"Послуг зі зберігання","editor":"text"},
+	{"name":"Телефон","value":"068-677-43-23","group":"Послуг зі зберігання","editor":"text"},
+	{"name":"Дод. телефон","value":"063-143-79-15","group":"Послуг зі зберігання","editor":"text"},
+	{"name":"Авто","value":"Mersedes S","group":"Послуг зі зберігання","editor":"text"},
+	{"name":"Термін зберігання","value":"01/02/2012","group":"Послуг зі зберігання","editor":"datebox"},
+	{"name":"Сплачено","value":"false","group":"Послуг зі зберігання","editor":{
+		"type":"checkbox",
+		"options":{
+			"on":true,
+			"off":false
+		}
+	}},
+
+	{"name":"Категорія","value":"Шини","group":"Опис","editor":"text"},
+	{"name":"Найменування","value":"Michelin PS3 245/45 19 + 275/40 19 ","group":"Опис","editor":"text"},
+	{"name":"Дод. інфо","value":"2x2","group":"Опис","editor":"text"},
+	{"name":"К-сть","value":"4","group":"Опис","editor":"numberbox"},
+	{"name":"Нотатки","value":"","group":"Опис","editor":{
+		"type":"textbox",
+		"options":{
+			"multiline":true,
+			"height":50
+		}
+	}}
+]}
