@@ -2,7 +2,7 @@
 		<div data-options="region:'west'" style="width:40%;">
 			<table id="storages_list" class="easyui-datagrid" title=""
 					data-options="
-						url:'//marinara.loc/api/storages',  // 'storage.json'
+						url:'/api/storages',  // 'storage.json'
 						method:'get',
 						fit:true,
 						plain:1,

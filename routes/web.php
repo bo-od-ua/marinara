@@ -50,6 +50,21 @@ Route::middleware(['auth'])->group(function () {
 
 Auth::routes();
 
+Route::get('/clear-cache', function() {
+    $exitCode = Artisan::call('view:clear');
+    $run = Artisan::call('route:clear');
+    $run = Artisan::call('config:clear');
+    $run = Artisan::call('cache:clear');
+    $run = Artisan::call('config:cache');
+    $run = Artisan::call('optimize:clear');
+
+    return 'DONE'; //Return anything
+});
+//Route::get('/dbtest', function (){
+//    $posts = DB::table('storages')->get();
+//    return $posts;
+//});
+
 //Route::post('register', [RegisterController::class, 'register'])
 //    ->middleware('restrictothers');
 //
