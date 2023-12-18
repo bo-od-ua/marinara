@@ -60,6 +60,7 @@ Route::get('/clear-cache', function() {
 
     return 'DONE'; //Return anything
 });
+
 //Route::get('/dbtest', function (){
 //    $posts = DB::table('storages')->get();
 //    return $posts;
@@ -67,5 +68,4 @@ Route::get('/clear-cache', function() {
 
 //Route::post('register', [RegisterController::class, 'register'])
 //    ->middleware('restrictothers');
-//
 //Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

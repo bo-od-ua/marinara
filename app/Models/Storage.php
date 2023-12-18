@@ -8,5 +8,18 @@ use Illuminate\Database\Eloquent\Model;
 class Storage extends Model
 {
     use HasFactory;
-    protected $fillable = ['name'];
+    protected $fillable = [
+        'name',
+        'name_alt',
+        'phone',
+        'phone_alt',
+        'car_info',
+        'storage_time',
+        'price',
+        'paid',
+        'descr_category',
+        'descr_name',
+        'descr_notise',
+        'descr_amount',
+    ];
 }
