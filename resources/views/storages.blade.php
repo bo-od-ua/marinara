@@ -16,10 +16,8 @@
 						toolbar:'#storages_list-toolbar',
 						onClickRow: function(node){},
 						onLoadSuccess:function(){},
-                        onClickRow: function(index,row){},
-                        onDblClickRow: function(index,row){
-                            storagesEdit(row);
-                        },
+                        onClickRow: function(index,row){ storagesEdit(row); },
+                        onDblClickRow: function(index,row){ storagesEdit(row); },
 						loader: function(param, success, error){       // order sort rows page
                             let opts = $(this).datagrid('options');
                             if (!opts.url) return false;
@@ -51,9 +49,9 @@
 				</thead>
 			</table>
 			<div id="storages_list-toolbar" style="padding:3px">
-				<a href="javascript:void(0)" class="easyui-linkbutton" onclick="foo()" data-options="iconCls:'icon-add',plain:true">add</a>
+				<a href="javascript:void(0)" class="easyui-linkbutton" onclick="storagesEdit();" data-options="iconCls:'icon-add',plain:true">add</a>
 <!--				<a href="javascript:void(0)" class="easyui-linkbutton" onclick="foo()" data-options="iconCls:'icon-save',plain:true,disabled:true">save</a> -->
-				<a href="javascript:void(0)" class="easyui-linkbutton" onclick="foo()" data-options="iconCls:'icon-remove',plain:true,disabled:true">remove</a>
+				<a id="storages_list-button_del" href="javascript:void(0)" class="easyui-linkbutton" onclick="storagesDel();" data-options="iconCls:'icon-remove',plain:true,disabled:true">remove</a>
 
 				<span style="float:right">
 					<input id="storages_search" class="search_input" data-controller="storages" style="width:200px;"
@@ -93,7 +91,7 @@
 					" style="width:100%;">
 			</table>
 			<div id="storages_item-toolbar" style="padding:3px">
-				<a id="storages_item-button_save" href="javascript:void(0)" class="easyui-linkbutton" onclick="foo()" data-options="iconCls:'icon-save',plain:true,disabled:true">save</a>
+				<a id="storages_item-button_save" href="javascript:void(0)" class="easyui-linkbutton" onclick="storagesSave();" data-options="iconCls:'icon-save',plain:true,disabled:true">save</a>
 				<a href="javascript:void(0)" class="easyui-linkbutton" onclick="foo()" data-options="iconCls:'icon-print',plain:true">print</a>
 			</div>
 		</div>

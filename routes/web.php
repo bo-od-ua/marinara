@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\RegisterController;
+
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -43,33 +44,9 @@ Route::middleware(['auth'])->group(function () {
         }
         return 'Token Cleared';
     });
-});
 
-//Route::get('/', function () {
-//    if(Auth::check()){
-//        return view('main');
-//    }
-//
-//    return redirect("/login");
-//})->middleware('auth');
-//
-//// Страница создания токена
-//Route::get('dashboard', function () {
-//    if(Auth::check() && Auth::user()->role === 1){
-//        return auth()
-//            ->user()
-//            ->createToken('auth_token', ['admin'])
-//            ->plainTextToken;
-//    }
-//    return redirect("/");
-//})->middleware('auth');
-//
-//Route::get('clear/token', function () {
-//    if(Auth::check() && Auth::user()->role === 1) {
-//        Auth::user()->tokens()->delete();
-//    }
-//    return 'Token Cleared';
-//})->middleware('auth');
+    Route::get('/out', 'App\Http\Controllers\Auth\LoginController@logout')->name('out');
+});
 
 Auth::routes();
 

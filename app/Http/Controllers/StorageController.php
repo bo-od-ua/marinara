@@ -83,11 +83,13 @@ class StorageController extends Controller
             if ($validator->passes()) {
                 // Обновление сообщения
                 $storage = Storage::find($id);
-                $storage->title = $request->input('title');
-                $storage->content = $request->input('content');
+//                $storage->title = $request->input('title');
+//                $storage->content = $request->input('content');
+                $storage->fill($request->all());
                 $storage->save();
                 return $this->onSuccess($storage, 'Storage Updated');
             }
+            Log::notice(print_r($request->all(), 1));
             return $this->onError(400, $validator->errors());
         }
         return $this->onError(401, 'Unauthorized Access');
