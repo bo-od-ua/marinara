@@ -67,9 +67,15 @@ $.extend($.fn.textbox.methods, {
 function messageDecode(data){
     let content= '';
     if(isJson(data)) data= JSON.parse(data)
-    for (let key in data) {
-        content+= data[key][0]+ "<br>";
+
+    if(typeof(data)!= 'string') {
+        content= data;
     }
+    else{
+        for (let key in data) { content += data[key][0] + "<br>"; }
+    }
+
+console.log(data);
     return content;
 }
 
@@ -159,7 +165,6 @@ function storagesGet(id= 0, data= ''){
         $.ajax({
             type: 'get',
             url: '/api/storages/'+ id,
-//            data: param,
             dataType: 'json',
             beforeSend: function (xhr) {
                 let bearer= $('#userBearer').val();
@@ -173,7 +178,9 @@ function storagesGet(id= 0, data= ''){
                 $('#storages_item-button_save').linkbutton('enable');
                 $('#storages_item-button_save').attr('data-id', id);
             },
-            error: function(){ error.apply(this, arguments); }
+            error: function(jqXHR, textStatus, errorThrown){
+                messageError(jqXHR, textStatus, errorThrown);
+            },
         });
     }
     else{
@@ -199,10 +206,12 @@ function storagesDel(){
                 xhr.setRequestHeader('Authorization', 'Bearer '+ bearer);
             },
             success: function(response){
-                console.log(response);
+                $.messager.alert('success', messageDecode(response.message),'info');
                 search('storages');
             },
-            error: function(){ error.apply(this, arguments); }
+            error: function(jqXHR, textStatus, errorThrown){
+                messageError(jqXHR, textStatus, errorThrown);
+            },
         });
     }
 }
@@ -238,10 +247,7 @@ function storagesSave(){
             search('storages');
         },
         error: function(jqXHR, textStatus, errorThrown){
-            let response= JSON.parse(jqXHR.responseText);
-
-            $.messager.alert(textStatus+ " status: "+ jqXHR.status, messageDecode(response.message), textStatus);
-            console.log(response);
+            messageError(jqXHR, textStatus, errorThrown);
         },
     });
 
@@ -264,6 +270,15 @@ function storagesEdit(row= ''){
     }
 
     storagesGet(id, data);
+}
+
+function messageError(jqXHR, textStatus, errorThrown){
+    let response= JSON.parse(jqXHR.responseText);
+
+    $.messager.alert(textStatus+ " status: "+ jqXHR.status, messageDecode(response.message), textStatus);
+    console.log('messageError');
+    console.log(response);
+    console.log('/messageError');
 }
 
 function mainTabAdd(tab){
