@@ -16,7 +16,7 @@
     <script type="text/javascript" src="/js/easyui/datagrid-filter.js"></script>
 
     <script src="{{ asset('js/app.js') }}" defer></script>
-    <script src="{{ asset('js/marinara.js') }}?v=0.01" defer></script>
+    <script src="{{ asset('js/marinara.js') }}?v=0.02" defer></script>
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
