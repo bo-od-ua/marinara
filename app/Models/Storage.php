@@ -22,4 +22,9 @@ class Storage extends Model
         'descr_notise',
         'descr_amount',
     ];
+
+    public function setPaid($value)
+    {
+        $this->attributes['first_name'] = (int)$value;
+    }
 }

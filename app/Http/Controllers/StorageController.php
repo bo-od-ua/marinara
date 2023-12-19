@@ -22,7 +22,7 @@ class StorageController extends Controller
         if ($this->isAdmin($request->user())) {
 //            $storage = DB::table('storages')->get();
 //            $storage = Storage::paginate($request->rows)->orderBy('id', 'desc');
-            Log::notice(print_r($request->all(), 1));
+            Log::notice("[".__METHOD__."]< ".print_r($request->all(), 1));
             $storage = DB::table('storages')
                 ->when(!empty($request->search), function($query){
                     return $query->where('name', 'like', '%'.request()->search.'%')
@@ -52,23 +52,30 @@ class StorageController extends Controller
     }
     public function createStorage(Request $request): JsonResponse
     {
+        Log::notice("[".__METHOD__."] ".print_r($request->all(), 1));
         $user = $request->user();
         if ($this->isAdmin($user) || $this->isWriter($user)) {
             $validator = Validator::make($request->all(), $this->storageValidationRules());
             if ($validator->passes()) {
                 // Создание нового сообщения
-                $storage = new Storage();
-                $storage->name = $request->input('name');
-                $storage->name_alt = $request->input('name') ?? 'aaaa';
-//                $storage->slug = Str::slug($request->input('title'));
-                $storage->phone = $request->input('phone');
-                $storage->car_info = $request->input('car_info') ?? '?';
-                $storage->storage_time = $request->input('storage_time') ?? '2022-01-01';
-                $storage->sum = $request->input('sum') ?? 0;
-                $storage->descr_category = $request->input('descr_category') ?? '';
-                $storage->descr_name = $request->input('descr_name') ?? '';
-                $storage->descr_amount = $request->input('descr_amount') ?? 0;
-                $storage->save();
+
+                $storage= Storage::create($request->all());
+
+//                $storage = new Storage();
+//                $storage->name = $request->input('name');
+//                $storage->name_alt = $request->input('name') ?? 'aaaa';
+////                $storage->slug = Str::slug($request->input('title'));
+//                $storage->phone = $request->input('phone');
+//                $storage->car_info = $request->input('car_info') ?? '?';
+//                $storage->storage_time = $request->input('storage_time') ?? '2022-01-01';
+//                $storage->sum = $request->input('sum') ?? 0;
+//                $storage->descr_category = $request->input('descr_category') ?? '';
+//                $storage->descr_name = $request->input('descr_name') ?? '';
+//                $storage->descr_amount = $request->input('descr_amount') ?? 0;
+
+//                $storage->fill($request->all());
+//                $storage->save();
+
                 return $this->onSuccess($storage, 'Storage Created');
             }
             return $this->onError(400, $validator->errors());
@@ -83,13 +90,11 @@ class StorageController extends Controller
             if ($validator->passes()) {
                 // Обновление сообщения
                 $storage = Storage::find($id);
-//                $storage->title = $request->input('title');
-//                $storage->content = $request->input('content');
                 $storage->fill($request->all());
                 $storage->save();
                 return $this->onSuccess($storage, 'Storage Updated');
             }
-            Log::notice(print_r($request->all(), 1));
+            Log::notice("[".__METHOD__."] ".print_r($request->all(), 1));
             return $this->onError(400, $validator->errors());
         }
         return $this->onError(401, 'Unauthorized Access');

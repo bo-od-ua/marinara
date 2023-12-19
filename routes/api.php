@@ -26,7 +26,6 @@ Route::group(['middleware' => 'auth:sanctum'], function() {
     Route::post('users/writer', [StorageController::class, 'createWriter']); // add a new user with writer scope
     Route::post('users/subscriber', [StorageController::class, 'createSubscriber']); // add a new user with subscriber scope
     Route::delete('users/{id}', [StorageController::class, 'deleteUser']); // delete a user
-
 });
 
 //Route::middleware('auth:sanctum')->get('/user', function (Request $request) {

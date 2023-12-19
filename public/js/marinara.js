@@ -154,6 +154,7 @@ function storagesAcessor(row, data= {}){
 }
 
 function storagesGet(id= 0, data= ''){
+    $('#storages_item-button_save').attr('data-id', 0);
     if(id){
         $.ajax({
             type: 'get',
@@ -170,6 +171,7 @@ function storagesGet(id= 0, data= ''){
                 data.total= data.rows.length;
                 $("#storages_item").propertygrid('loadData', data);
                 $('#storages_item-button_save').linkbutton('enable');
+                $('#storages_item-button_save').attr('data-id', id);
             },
             error: function(){ error.apply(this, arguments); }
         });
@@ -181,24 +183,41 @@ function storagesGet(id= 0, data= ''){
 
         $("#storages_item").propertygrid('loadData', data);
     }
+
+    console.log(data);
 }
 
 function storagesDel(){
     row = $('#storages_list').datagrid('getSelected');
-    console.log(row);
+    if(row){
+        $.ajax({
+            type: 'delete',
+            url: '/api/storages/'+ row.id,
+            dataType: 'json',
+            beforeSend: function (xhr) {
+                let bearer= $('#userBearer').val();
+                xhr.setRequestHeader('Authorization', 'Bearer '+ bearer);
+            },
+            success: function(response){
+                console.log(response);
+                search('storages');
+            },
+            error: function(){ error.apply(this, arguments); }
+        });
+    }
 }
 
 function storagesSave(){
-    let id= 0;
-    let url= '/api/storages/';
+    let id= parseInt($('#storages_item-button_save').attr('data-id'));
+    let url= '/api/storages';
     let method= 'post';
-    let row = $('#storages_list').datagrid('getSelected');
+
     let data= $('#storages_item').propertygrid('getData');
     data= storages2Back(data);
 
-    if(row.id) {
+    if(id) {
         method= 'put';
-        url += row.id;
+        url += '/'+ id;
     }
 
     $.ajax({
@@ -209,21 +228,20 @@ function storagesSave(){
         beforeSend: function (xhr) {
             let bearer = $('#userBearer').val();
             xhr.setRequestHeader('Authorization', 'Bearer ' + bearer);
-
-            console.log(data);
         },
         complete: function(jqXHR, textStatus) {
-//            console.log(jqXHR.status);
         },
         success: function (response) {
             console.log(response);
+            $('#storages_list-button_del').linkbutton('disable');
+            $.messager.alert('success', messageDecode(response.message),'info');
+            search('storages');
         },
         error: function(jqXHR, textStatus, errorThrown){
             let response= JSON.parse(jqXHR.responseText);
 
             $.messager.alert(textStatus+ " status: "+ jqXHR.status, messageDecode(response.message), textStatus);
-//            console.log("exception: "+ textStatus+ ", error: "+ jqXHR.responseText+ ", status:"+ jqXHR.status);
-            console.log(JSON.parse(response.message));
+            console.log(response);
         },
     });
 
@@ -269,7 +287,7 @@ function mainTabAdd(tab){
     }
 }
 
-function search(route, value){
+function search(route){
     $('#'+ route+ '_list').datagrid('load', {
         search: $('#'+ route+ '_search').val(),
     });
