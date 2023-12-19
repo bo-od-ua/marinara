@@ -68,7 +68,7 @@ function messageDecode(data){
     let content= '';
     if(isJson(data)) data= JSON.parse(data)
 
-    if(typeof(data)!= 'string') {
+    if(typeof(data)== 'string') {
         content= data;
     }
     else{
@@ -207,6 +207,7 @@ function storagesDel(){
             },
             success: function(response){
                 $.messager.alert('success', messageDecode(response.message),'info');
+                storagesEdit();
                 search('storages');
             },
             error: function(jqXHR, textStatus, errorThrown){
@@ -264,7 +265,7 @@ function storagesEdit(row= ''){
     }
     data.total= data.rows.length;
 
-    if(row.id){
+    if(row){
         $('#storages_list-button_del').linkbutton('enable');
         id = row.id;
     }
