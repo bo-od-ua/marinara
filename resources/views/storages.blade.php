@@ -82,6 +82,7 @@
 						onEndEdit: function(index,row){
 						    $('#storages_item-button_save').linkbutton('enable');
 						},
+
 {{--                        loadFilter: function(data){--}}
 {{--                            return {--}}
 {{--                                        total: data.data.total,--}}

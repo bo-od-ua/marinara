@@ -64,6 +64,25 @@ $.extend($.fn.textbox.methods, {
     }
 });
 
+$.fn.datebox.defaults.formatter = function (date) {
+    var y = date.getFullYear();
+    var m = date.getMonth() + 1;
+    var d = date.getDate();
+    return y + '-' + (m < 10 ? ('0' + m) : m) + '-' + (d < 10 ? ('0' + d) : d);
+};
+$.fn.datebox.defaults.parser = function (s) {
+    if (!s) return new Date();
+    var ss = s.split('-');
+    var d = parseInt(ss[2], 10);
+    var m = parseInt(ss[1], 10);
+    var y = parseInt(ss[0], 10);
+    if (!isNaN(y) && !isNaN(m) && !isNaN(d)) {
+        return new Date(y, m - 1, d);
+    } else {
+        return new Date();
+    }
+};
+
 function messageDecode(data){
     let content= '';
     if(isJson(data)) data= JSON.parse(data)
@@ -121,7 +140,9 @@ function storages2Back(data= {}){
         row[k]= data.rows[i].value;
     }
 
-return row;
+    if(row.storage_time) row.storage_time= row.storage_time.replace(/\//gi, "-");
+
+    return row;
 }
 function storagesMutator(row, data= {}){
 //row.data.name= data.rows[0].value;
@@ -160,6 +181,7 @@ function storagesAcessor(row, data= {}){
 }
 
 function storagesGet(id= 0, data= ''){
+    $("#storages_item").propertygrid('loadData', []);
     $('#storages_item-button_save').attr('data-id', 0);
     if(id){
         $.ajax({
@@ -307,4 +329,11 @@ function search(route){
     $('#'+ route+ '_list').datagrid('load', {
         search: $('#'+ route+ '_search').val(),
     });
+}
+
+function dateFormatter(date){
+    var y = date.getFullYear();
+    var m = date.getMonth()+1;
+    var d = date.getDate();
+    return y+'-'+(m<10?('0'+m):m)+'-'+(d<10?('0'+d):d);
 }

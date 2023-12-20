@@ -25,6 +25,10 @@ class Storage extends Model
 
     public function setPaid($value)
     {
-        $this->attributes['first_name'] = (int)$value;
+        $this->attributes['paid'] = (int)$value;
+    }
+    public function setStorageTime($value)
+    {
+        $this->attributes['	storage_time'] = str_replace('/', '-');
     }
 }
