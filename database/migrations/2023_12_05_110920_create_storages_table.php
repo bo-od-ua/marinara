@@ -15,6 +15,7 @@ class CreateStoragesTable extends Migration
     {
         Schema::create('storages', function (Blueprint $table) {
             $table->id();
+            $table->integer('article')->nullable();
             $table->string('name');
             $table->string('name_alt')->nullable();
             $table->string('phone');

@@ -43,6 +43,7 @@
 					">
 				<thead>
 					<tr>
+                        <th field="article" sortable="true">id</th>
 						<th field="name" width="50" sortable="true">name</th>
 						<th field="phone" width="50" data-options="align:'center'" sortable="true">phone</th>
 					</tr>

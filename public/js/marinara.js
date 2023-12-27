@@ -6,6 +6,7 @@ const tabs= {
 const storagesData= {
 //    total:12,
     rows:[
+        {name:"ID",value:"",group:"Послуг зі зберігання",editor:"numberbox"},
         {name:"ПІБ",value:"",group:"Послуг зі зберігання",editor:"text"},
         {name:"Дод. ПІБ",value:"",group:"Послуг зі зберігання",editor:"text"},
         {name:"Телефон",value:"",group:"Послуг зі зберігання",editor:"text"},
@@ -120,6 +121,7 @@ function storagesList(){
 function storages2Back(data= {}){
     let row= {};
     let comparison= {
+        "ID": 'article',
         "ПІБ": 'name',
         "Дод. ПІБ": 'name_alt',
         "Телефон": 'phone',
@@ -146,36 +148,38 @@ function storages2Back(data= {}){
 }
 function storagesMutator(row, data= {}){
 //row.data.name= data.rows[0].value;
-    row.name=           data[0].value;
-    row.name_alt=       data[1].value;
-    row.phone=          data[2].value;
-    row.phone_alt=      data[3].value;
-    row.car_info=       data[4].value;
-    row.storage_time=   data[5].value;
-    row.price=          data[6].value;
-    row.paid=           data[7].value;
-    row.descr_category= data[8].value;
-    row.descr_name=     data[9].value;
-    row.descr_notise=   data[10].value;
-    row.descr_amount=   data[11].value;
+    row.article=        data[0].value;
+    row.name=           data[1].value;
+    row.name_alt=       data[2].value;
+    row.phone=          data[3].value;
+    row.phone_alt=      data[4].value;
+    row.car_info=       data[5].value;
+    row.storage_time=   data[6].value;
+    row.price=          data[7].value;
+    row.paid=           data[8].value;
+    row.descr_category= data[9].value;
+    row.descr_name=     data[10].value;
+    row.descr_notise=   data[11].value;
+    row.descr_amount=   data[12].value;
 
     return row;
 }
 
 function storagesAcessor(row, data= {}){
 //data.rows[0].value=  row.data.name;
-    data[0].value=   row.name;
-    data[1].value=   row.name_alt;
-    data[2].value=   row.phone;
-    data[3].value=   row.phone_alt;
-    data[4].value=   row.car_info;
-    data[5].value=   row.storage_time;
-    data[6].value=   row.price;
-    data[7].value=   row.paid;
-    data[8].value=   row.descr_category;
-    data[9].value=   row.descr_name;
-    data[10].value=  row.descr_notise;
-    data[11].value=  row.descr_amount;
+    data[0].value=   row.article;
+    data[1].value=   row.name;
+    data[2].value=   row.name_alt;
+    data[3].value=   row.phone;
+    data[4].value=   row.phone_alt;
+    data[5].value=   row.car_info;
+    data[6].value=   row.storage_time;
+    data[7].value=   row.price;
+    data[8].value=   row.paid;
+    data[9].value=   row.descr_category;
+    data[10].value=  row.descr_name;
+    data[11].value=  row.descr_notise;
+    data[12].value=  row.descr_amount;
 
     return data;
 }

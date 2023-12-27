@@ -27,6 +27,8 @@ class StorageController extends Controller
                 ->when(!empty($request->search), function($query){
                     return $query->where('name', 'like', '%'.request()->search.'%')
                         ->orWhere('phone', 'like', '%'.request()->search.'%')
+                        ->orWhere('article', 'like', '%'.request()->search.'%')
+                        ->orWhere('storage_time', 'like', '%'.request()->search.'%')
                         ->orWhere('car_info', 'like', '%'.request()->search.'%');
                 })
                 ->orderBy(
