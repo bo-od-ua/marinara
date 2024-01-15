@@ -298,6 +298,11 @@ function storagesEdit(row= ''){
 
     storagesGet(id, data);
 }
+function storagesPDF(){
+    let id= parseInt($('#storages_item-button_save').attr('data-id'));
+    let url= '/storages/pdf/'+ id;
+    window.open(url, '_blank');
+}
 
 function messageError(jqXHR, textStatus, errorThrown){
     let response= JSON.parse(jqXHR.responseText);

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth\RegisterController;
 
+use App\Http\Controllers\StorageController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -27,6 +28,7 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('users', function () { return view('users'); });
     Route::get('storages', function () { return view('storages'); });
+    Route::get('storages/pdf/{id}', [StorageController::class, 'pdfStorage']);
 
     Route::get('dashboard', function () {
         if(Auth::check() && Auth::user()->role === 1){

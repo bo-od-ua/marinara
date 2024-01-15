@@ -94,7 +94,7 @@
 			</table>
 			<div id="storages_item-toolbar" style="padding:3px">
 				<a id="storages_item-button_save" href="javascript:void(0)" class="easyui-linkbutton" onclick="storagesSave();" data-options="iconCls:'icon-save',plain:true,disabled:true" data-id="0">save</a>
-				<a href="javascript:void(0)" class="easyui-linkbutton" onclick="foo()" data-options="iconCls:'icon-print',plain:true">print</a>
+				<a href="javascript:void(0)" class="easyui-linkbutton" onclick="storagesPDF();" data-options="iconCls:'icon-print',plain:true">print</a>
 			</div>
 		</div>
 	</div>

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Lib\ApiHelpers;
 use App\Models\Storage;
 use App\Models\User;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -114,6 +115,25 @@ class StorageController extends Controller
         }
         return $this->onError(401, 'Unauthorized Access');
     }
+
+    public function pdfStorage(Request $request, $id)
+    {
+        $user = $request->user();
+        if ($user) {
+            $storage = Storage::find($id); // Найдем id сообщения
+
+            $pdf = PDF::loadView('blank', compact('id', 'storage'));
+            return $pdf->stream('invoice.pdf');
+
+//            $storage->delete(); // Удаляем указанное сообщение
+//            if (!empty($storage)) {
+//                return $this->onSuccess($storage, 'Storage Deleted');
+//            }
+            return $this->onError(404, 'Storage Not Found');
+        }
+        return $this->onError(401, 'Unauthorized Access');
+    }
+
     public function createWriter(Request $request): JsonResponse
     {
         $user = $request->user();
