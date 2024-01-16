@@ -26,7 +26,7 @@ $styleID= 'font-size:50px;font: bold/';
 		<td style="border: 0px solid #000000;text-align:center;">
 			Шинный центр<br>
 			ул. Люстдорфская дорога 121/1а<br>
-			тел. (097) 798-88-58<br>
+			тел. (097) 217-63-61<br>
 		</td>
 	</tr>
 	<tr>
@@ -107,18 +107,18 @@ $styleID= 'font-size:50px;font: bold/';
 <table style="width:100%;text-align:center;padding:5px;">
 	<tr>
 		<td style="border: 1px dashed #000000;">
-			<h1 style="{{$styleID}}">№{{$id}}</h1>
+			<h1 style="{{$styleID}}">№{{$storage->article}}</h1>
 		</td>
         <td style="border: 1px dashed #000000;">
-            <h1 style="{{$styleID}}">№{{$id}}</h1>
+            <h1 style="{{$styleID}}">№{{$storage->article}}</h1>
         </td>
 	</tr>
 	<tr>
 		<td style="border: 1px dashed #000000;">
-			<h1 style="{{$styleID}}">№{{$id}}</h1>
+			<h1 style="{{$styleID}}">№{{$storage->article}}</h1>
 		</td>
         <td style="border: 1px dashed #000000;">
-            <h1 style="{{$styleID}}">№{{$id}}</h1>
+            <h1 style="{{$styleID}}">№{{$storage->article}}</h1>
         </td>
 	</tr>
 </table>

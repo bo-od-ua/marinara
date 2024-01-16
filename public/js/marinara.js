@@ -15,7 +15,7 @@ const storagesData= {
         {name:"Термін зберігання",value:"",group:"Послуг зі зберігання",editor:"datebox"},
         {name:"Оплата",value:"",group:"Послуг зі зберігання",editor:"text"},
         {name:"Сплачено",value:false,group:"Послуг зі зберігання",editor:{
-                type:"checkbox",
+                type:"checkbox",  // formatter: https://www.jeasyui.com/forum/index.php?topic=5687.0
                 options:{
                     on:true,
                     off:false
@@ -143,6 +143,12 @@ function storages2Back(data= {}){
     }
 
     if(row.storage_time) row.storage_time= row.storage_time.replace(/\//gi, "-");
+    if(row.paid== 'true') {
+        row.paid = 1;
+    }
+    else{
+        row.paid = 0;
+    }
 
     return row;
 }
@@ -300,8 +306,14 @@ function storagesEdit(row= ''){
 }
 function storagesPDF(){
     let id= parseInt($('#storages_item-button_save').attr('data-id'));
-    let url= '/storages/pdf/'+ id;
-    window.open(url, '_blank');
+    let url= '/storages/pdf/';
+
+    if(id) {
+        window.open(url + id, '_blank');
+    }
+    else{
+        $.messager.alert('error','запись не выбрана.','error');
+    }
 }
 
 function messageError(jqXHR, textStatus, errorThrown){
