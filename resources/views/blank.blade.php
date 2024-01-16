@@ -1,7 +1,7 @@
 @php
 $styleTDname=  'border: 1px solid #000000;width:30%;padding:5px;';
 $styleTDvalue= 'border: 1px solid #000000;padding:5px;';
-$styleID= 'font-size:50px;font: bold/';
+$styleID= 'font-size:95px;font-weight:bold;';
 @endphp
 <!DOCTYPE HTML>
 
@@ -107,18 +107,18 @@ $styleID= 'font-size:50px;font: bold/';
 <table style="width:100%;text-align:center;padding:5px;">
 	<tr>
 		<td style="border: 1px dashed #000000;">
-			<h1 style="{{$styleID}}">№{{$storage->article}}</h1>
+			<span style="{{$styleID}}">№{{$storage->article}}</span>
 		</td>
         <td style="border: 1px dashed #000000;">
-            <h1 style="{{$styleID}}">№{{$storage->article}}</h1>
+            <span style="{{$styleID}}">№{{$storage->article}}</span>
         </td>
 	</tr>
 	<tr>
 		<td style="border: 1px dashed #000000;">
-			<h1 style="{{$styleID}}">№{{$storage->article}}</h1>
+			<span style="{{$styleID}}">№{{$storage->article}}</span>
 		</td>
         <td style="border: 1px dashed #000000;">
-            <h1 style="{{$styleID}}">№{{$storage->article}}</h1>
+            <span style="{{$styleID}}">№{{$storage->article}}</span>
         </td>
 	</tr>
 </table>
