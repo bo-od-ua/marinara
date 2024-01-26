@@ -307,32 +307,29 @@ function storagesSave(){
     if(id) {
         method= 'put';
         url += '/'+ id;
+    }
 
-        $.ajax({
-            type: method,
-            url: url,
-            data: data,
-            dataType: 'json',
-            beforeSend: function (xhr) {
-                let bearer = $('#userBearer').val();
-                xhr.setRequestHeader('Authorization', 'Bearer ' + bearer);
-            },
-            complete: function(jqXHR, textStatus) {
-            },
-            success: function (response) {
-                console.log(response);
-                $('#storages_list-button_del').linkbutton('disable');
-                $.messager.alert('success', messageDecode(response.message),'info');
-                search('storages');
-            },
-            error: function(jqXHR, textStatus, errorThrown){
-                messageError(jqXHR, textStatus, errorThrown);
-            },
-        });
-    }
-    else{
-        $.messager.alert('error','запись не выбрана.','error');
-    }
+    $.ajax({
+        type: method,
+        url: url,
+        data: data,
+        dataType: 'json',
+        beforeSend: function (xhr) {
+            let bearer = $('#userBearer').val();
+            xhr.setRequestHeader('Authorization', 'Bearer ' + bearer);
+        },
+        complete: function(jqXHR, textStatus) {
+        },
+        success: function (response) {
+            console.log(response);
+            $('#storages_list-button_del').linkbutton('disable');
+            $.messager.alert('success', messageDecode(response.message),'info');
+            search('storages');
+        },
+        error: function(jqXHR, textStatus, errorThrown){
+            messageError(jqXHR, textStatus, errorThrown);
+        },
+    });
 
 //    console.log(row);
 }

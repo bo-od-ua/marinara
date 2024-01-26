@@ -38,19 +38,19 @@ class UserService
         return (object)['success'=> 0, 'code'=> 401, 'message'=> 'Unauthorized Access', 'data' => []];
     }
 
-    public function get(Request $request, $id): array
+    public function get(Request $request, $id): object
     {
         $user = $request->user();
         if ($this->isAdmin($user) || $this->isWriter($user)) {
             $data = DB::table('users')->where('id', $id)->first();
             if (!empty($data)) {
-                return ['success'=> 1, 'code'=> 200, 'message'=> 'Storage Retrieved', 'data' => $data];
+                return (object)['success'=> 1, 'code'=> 200, 'message'=> 'Storage Retrieved', 'data' => $data];
             }
-            return ['success'=> 0, 'code'=> 404, 'message'=> 'User Not Found', 'data' => []];
+            return (object)['success'=> 0, 'code'=> 404, 'message'=> 'User Not Found', 'data' => []];
         }
-        return ['success'=> 0, 'code'=> 401, 'message'=> 'Unauthorized Access', 'data' => []];
+        return (object)['success'=> 0, 'code'=> 401, 'message'=> 'Unauthorized Access', 'data' => []];
     }
-    public function create(Request $request): array
+    public function create(Request $request): object
     {
         $role= 3;
         $user = $request->user();
@@ -66,14 +66,14 @@ class UserService
                     'password' => Hash::make($request->input('password')),
                 ]);
                 $writerToken = $user->createToken('auth_token', ['subscriber'])->plainTextToken;
-                return ['success'=> 1, 'code'=> 200, 'message'=> 'User Created With Subscriber Privilege', 'data' => $writerToken];
+                return (object)['success'=> 1, 'code'=> 200, 'message'=> 'User Created With Subscriber Privilege', 'data' => $writerToken];
             }
-            return ['success'=> 0, 'code'=> 400, 'message'=> $validator->errors(), 'data' => []];
+            return (object)['success'=> 0, 'code'=> 400, 'message'=> $validator->errors(), 'data' => []];
         }
-        return ['success'=> 0, 'code'=> 401, 'message'=> 'Unauthorized Access', 'data' => []];
+        return (object)['success'=> 0, 'code'=> 401, 'message'=> 'Unauthorized Access', 'data' => []];
     }
 
-    public function delete(Request $request, $id): array
+    public function delete(Request $request, $id): object
     {
         $user = $request->user();
         if ($this->isAdmin($user) || $this->isWriter($user)) {
@@ -81,12 +81,12 @@ class UserService
             if ($user->role !== 1) {
                 $user->delete(); // Удалим указанного пользователя
                 if (!empty($user)) {
-                    return ['success'=> 1, 'code'=> 200, 'message'=> 'User Deleted', 'data' => []];
+                    return (object)['success'=> 1, 'code'=> 200, 'message'=> 'User Deleted', 'data' => []];
                 }
-                return ['success'=> 0, 'code'=> 404, 'message'=> 'User Not Found', 'data' => []];
+                return (object)['success'=> 0, 'code'=> 404, 'message'=> 'User Not Found', 'data' => []];
             }
         }
-        return ['success'=> 0, 'code'=> 401, 'message'=> 'Unauthorized Access', 'data' => []];
+        return (object)['success'=> 0, 'code'=> 401, 'message'=> 'Unauthorized Access', 'data' => []];
     }
     protected function validatedRules(): array
     {

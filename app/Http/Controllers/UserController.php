@@ -26,11 +26,11 @@ class UserController extends Controller
     {
         $return= $serviceUser->list($request);
         return response()->json([
-            'success' => $return['success'],
-            'message' => $return['message'],
-            'data' =>    $return['data'],
-            'code' =>    $return['code'],
-        ], $return['code']);
+            'success' => $return->success,
+            'message' => $return->message,
+            'data' =>    $return->data,
+            'code' =>    $return->code,
+        ], $return->code);
     }
 
     /**
@@ -53,11 +53,11 @@ class UserController extends Controller
     {
         $return= $serviceUser->create($request);
         return response()->json([
-            'success' => $return['success'],
-            'message' => $return['message'],
-            'data' =>    $return['data'],
-            'code' =>    $return['code'],
-        ], $return['code']);
+            'success' => $return->success,
+            'message' => $return->message,
+            'data' =>    $return->data,
+            'code' =>    $return->code,
+        ], $return->code);
     }
 
     /**
@@ -70,11 +70,11 @@ class UserController extends Controller
     {
         $return= $serviceUser->get($request, $id);
         return response()->json([
-            'success' => $return['success'],
-            'message' => $return['message'],
-            'data' =>    $return['data'],
-            'code' =>    $return['code'],
-        ], $return['code']);
+            'success' => $return->success,
+            'message' => $return->message,
+            'data' =>    $return->data,
+            'code' =>    $return->code,
+        ], $return->code);
     }
 
     /**
@@ -112,10 +112,10 @@ class UserController extends Controller
     {
         $return= $serviceUser->delete($request, $id);
         return response()->json([
-            'success' => $return['success'],
-            'message' => $return['message'],
-            'data' =>    $return['data'],
-            'code' =>    $return['code'],
-        ], $return['code']);
+            'success' => $return->success,
+            'message' => $return->message,
+            'data' =>    $return->data,
+            'code' =>    $return->code,
+        ], $return->code);
     }
 }
