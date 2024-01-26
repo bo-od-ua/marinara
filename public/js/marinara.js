@@ -3,6 +3,38 @@ const tabs= {
     'storages': 'хранение',
 };
 
+const usersData= {
+//    total:4,
+    rows:[
+        {name:"ПІБ",value:"",group:"Профиль",editor:"text"},
+        {name:"email",value:"",group:"Профиль",editor:{
+                type:"validatebox",
+                options:{
+                    validType:"email"
+                }}},
+        {name:"password",value:"",group:"Профиль",editor:"text"
+                // {type:"validatebox",
+                // options:{
+                //     validType:"length[3,30]",
+                //     validateOnCreate:false
+                // }}
+        },
+        {name:"Администратор",value:false,group:"Профиль",editor:{
+                type:"checkbox",
+                options:{
+                    "on":true,
+                    "off":false
+                }
+            }},
+        {name:"Нотатки",value:"",group:"Профиль",editor:{
+                type:"textbox",
+                options:{
+                    "multiline":true,
+                    "height":50
+                }}}
+    ]
+}
+
 const storagesData= {
 //    total:12,
     rows:[
@@ -95,7 +127,7 @@ function messageDecode(data){
         for (let key in data) { content += data[key][0] + "<br>"; }
     }
 
-console.log(data);
+//console.log(data);
     return content;
 }
 
@@ -152,21 +184,23 @@ function storages2Back(data= {}){
 
     return row;
 }
-function storagesMutator(row, data= {}){
-//row.data.name= data.rows[0].value;
-    row.article=        data[0].value;
-    row.name=           data[1].value;
-    row.name_alt=       data[2].value;
-    row.phone=          data[3].value;
-    row.phone_alt=      data[4].value;
-    row.car_info=       data[5].value;
-    row.storage_time=   data[6].value;
-    row.price=          data[7].value;
-    row.paid=           data[8].value;
-    row.descr_category= data[9].value;
-    row.descr_name=     data[10].value;
-    row.descr_notise=   data[11].value;
-    row.descr_amount=   data[12].value;
+function users2Back(data= {}){
+    let row= {};
+    let comparison= {
+        "ПІБ": 'name',
+        "Нотатки": 'notise',
+        "Администратор": 'role',
+        "email": 'email',
+        "password": 'password',
+    };
+
+    for (let i in data.rows) {
+        let key= data.rows[i].name;
+        let k= comparison[key];
+        row[k]= data.rows[i].value;
+    }
+
+    row.role=(row.role== true)? 2: 3;
 
     return row;
 }
@@ -186,6 +220,16 @@ function storagesAcessor(row, data= {}){
     data[10].value=  row.descr_name;
     data[11].value=  row.descr_notise;
     data[12].value=  row.descr_amount;
+
+    return data;
+}
+function usersAcessor(row, data= {}){
+    console.log(row);
+    data[0].value=   row.name;
+    data[1].value=   row.email;
+    data[2].value=   '';
+    data[3].value=   (row.role== '1' || row.role== '2')? true: false;
+    data[4].value=   row.notise;
 
     return data;
 }
@@ -247,6 +291,9 @@ function storagesDel(){
             },
         });
     }
+    else{
+        $.messager.alert('error','запись не выбрана.','error');
+    }
 }
 
 function storagesSave(){
@@ -260,29 +307,32 @@ function storagesSave(){
     if(id) {
         method= 'put';
         url += '/'+ id;
-    }
 
-    $.ajax({
-        type: method,
-        url: url,
-        data: data,
-        dataType: 'json',
-        beforeSend: function (xhr) {
-            let bearer = $('#userBearer').val();
-            xhr.setRequestHeader('Authorization', 'Bearer ' + bearer);
-        },
-        complete: function(jqXHR, textStatus) {
-        },
-        success: function (response) {
-            console.log(response);
-            $('#storages_list-button_del').linkbutton('disable');
-            $.messager.alert('success', messageDecode(response.message),'info');
-            search('storages');
-        },
-        error: function(jqXHR, textStatus, errorThrown){
-            messageError(jqXHR, textStatus, errorThrown);
-        },
-    });
+        $.ajax({
+            type: method,
+            url: url,
+            data: data,
+            dataType: 'json',
+            beforeSend: function (xhr) {
+                let bearer = $('#userBearer').val();
+                xhr.setRequestHeader('Authorization', 'Bearer ' + bearer);
+            },
+            complete: function(jqXHR, textStatus) {
+            },
+            success: function (response) {
+                console.log(response);
+                $('#storages_list-button_del').linkbutton('disable');
+                $.messager.alert('success', messageDecode(response.message),'info');
+                search('storages');
+            },
+            error: function(jqXHR, textStatus, errorThrown){
+                messageError(jqXHR, textStatus, errorThrown);
+            },
+        });
+    }
+    else{
+        $.messager.alert('error','запись не выбрана.','error');
+    }
 
 //    console.log(row);
 }
@@ -314,6 +364,103 @@ function storagesPDF(){
     else{
         $.messager.alert('error','запись не выбрана.','error');
     }
+}
+function usersGet(id= 0, data= ''){
+    $("#users_item").propertygrid('loadData', []);
+    $('#users_item-button_save').attr('data-id', 0);
+    if(id){
+        $.ajax({
+            type: 'get',
+            url: '/api/users/'+ id,
+            dataType: 'json',
+            beforeSend: function (xhr) {
+                let bearer= $('#userBearer').val();
+                xhr.setRequestHeader('Authorization', 'Bearer '+ bearer);
+            },
+            success: function(response){
+                if(response.success) {
+                    data.rows = usersAcessor(response.data, data.rows);
+                    data.total = data.rows.length;
+                    $("#users_item").propertygrid('loadData', data);
+                    $('#users_item-button_save').linkbutton('enable');
+                    $('#users_item-button_save').attr('data-id', id);
+                }
+                else{
+                    console.log(response);
+                    $.messager.alert("status: "+ response.code, messageDecode(response.message), 'error');
+                }
+            },
+            error: function(jqXHR, textStatus, errorThrown){
+                messageError(jqXHR, textStatus, errorThrown);
+            },
+        });
+    }
+    else{
+        for (let key in data.rows) {
+            data.rows[key].value = '';
+        }
+
+        $("#users_item").propertygrid('loadData', data);
+    }
+}
+
+function usersEdit(row= ''){
+    let data= {rows:[]};
+    let id= 0;
+
+// let data = Object.assign({}, storagesData);
+    for (let key in usersData.rows) {
+        data.rows[key] = usersData.rows[key];
+    }
+    data.total= data.rows.length;
+
+    if(row){
+        $('#users_list-button_del').linkbutton('enable');
+        id = row.id;
+    }
+
+    usersGet(id, data);
+}
+
+function usersSave(){
+    let id= parseInt($('#users_item-button_save').attr('data-id'));
+    let url= '/api/users';
+    let method= 'post';
+
+    let data= $('#users_item').propertygrid('getData');
+    data= users2Back(data);
+
+    if(id) {
+        method= 'put';
+        url += '/'+ id;
+
+        $.ajax({
+            type: method,
+            url: url,
+            data: data,
+            dataType: 'json',
+            beforeSend: function (xhr) {
+                let bearer = $('#userBearer').val();
+                xhr.setRequestHeader('Authorization', 'Bearer ' + bearer);
+            },
+            complete: function(jqXHR, textStatus) {
+            },
+            success: function (response) {
+                console.log(response);
+                $('#users_list-button_del').linkbutton('disable');
+                $.messager.alert('success', messageDecode(response.message),'info');
+                search('users');
+            },
+            error: function(jqXHR, textStatus, errorThrown){
+                messageError(jqXHR, textStatus, errorThrown);
+            },
+        });
+    }
+    else{
+        $.messager.alert('error','запись не выбрана.','error');
+    }
+
+//    console.log(row);
 }
 
 function messageError(jqXHR, textStatus, errorThrown){

@@ -87,38 +87,36 @@ $styleID= 'font-size:95px;font-weight:bold;';
 
 	<tr><td style="padding:5px;" colspan="2">&nbsp;</td></tr>
 
-	<tr>
-		<td style="width:50%;border: 0px solid #000000;padding:10px;">
-			Дата сдачи __________________________
-		</td>
-		<td style="border: 0px solid #000000;text-align:left;padding:10px;">
-			Подпись клиента __________________________
-		</td>
-	</tr>
+{{--	<tr>--}}
+{{--		<td style="width:50%;border: 0px solid #000000;padding:10px;">--}}
+{{--			Дата сдачи __________________________--}}
+{{--		</td>--}}
+{{--		<td style="border: 0px solid #000000;text-align:left;padding:10px;">--}}
+{{--			Подпись клиента __________________________--}}
+{{--		</td>--}}
+{{--	</tr>--}}
 
 	<tr><td style="padding:5px;" colspan="2">
-            <p>Обращаем внимание, что крайне желательной является предварительная запись. Это позволит сохранить Ваше время, избежав очереди, и ускорить процесс приемки резины на хранение.</p>
-
-            <p>Хранитель не несет ответственность за утрату, недостачу или повреждение, автошин и дисков, если они произошли вследствие непреодолимых сил (форс-мажор).</p>
-
+       <p>1. Звертаємо Вашу увагу, що приготування шин до видачі або сервісу встановлення відбувається попередньо за телефоном: +380972176361 та займає від 1-го до 3-х діб залежно від навантаження.</p>
+       <p>2. У випадку, якщо в результаті не передбачених сил (форс-мажор) було втрачено, або пошкоджено предмет зберігання(шини або диски), зберігач не несе відповідальність.</p>
     </td></tr>
 </table>
 <br>
 <table style="width:100%;text-align:center;padding:5px;">
 	<tr>
 		<td style="border: 1px dashed #000000;">
-			<span style="{{$styleID}}">№{{$storage->article}}</span>
+			<span style="{{$styleID}}">{{$storage->article}}</span>
 		</td>
         <td style="border: 1px dashed #000000;">
-            <span style="{{$styleID}}">№{{$storage->article}}</span>
+            <span style="{{$styleID}}">{{$storage->article}}</span>
         </td>
 	</tr>
 	<tr>
 		<td style="border: 1px dashed #000000;">
-			<span style="{{$styleID}}">№{{$storage->article}}</span>
+			<span style="{{$styleID}}">{{$storage->article}}</span>
 		</td>
         <td style="border: 1px dashed #000000;">
-            <span style="{{$styleID}}">№{{$storage->article}}</span>
+            <span style="{{$styleID}}">{{$storage->article}}</span>
         </td>
 	</tr>
 </table>

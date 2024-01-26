@@ -13,6 +13,8 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Str;
 
+use App\Services\UserService;
+
 use Illuminate\Support\Facades\Log;
 
 class StorageController extends Controller
@@ -122,16 +124,32 @@ class StorageController extends Controller
         if ($user) {
             $storage = Storage::find($id); // Найдем id сообщения
 
-            $pdf = PDF::loadView('blank', compact('id', 'storage'));
-            return $pdf->stream('invoice.pdf');
-
-//            $storage->delete(); // Удаляем указанное сообщение
-//            if (!empty($storage)) {
-//                return $this->onSuccess($storage, 'Storage Deleted');
-//            }
+            if (!empty($storage)) {
+                $pdf = PDF::loadView('blank', compact('id', 'storage'));
+                return $pdf->stream('invoice.pdf');
+            }
             return $this->onError(404, 'Storage Not Found');
         }
         return $this->onError(401, 'Unauthorized Access');
+    }
+
+    public function createUser(Request $request, UserService $serviceUser): JsonResponse
+    {
+        $return= $serviceUser->create($request);
+        return response()->json([
+            'success' => $return['success'],
+            'message' => $return['message'],
+            'data' =>    $return['data'],
+        ], $return['code']);
+    }
+    public function deleteUser(Request $request, $id, UserService $serviceUser): JsonResponse
+    {
+        $return= $serviceUser->delete($request, $id);
+        return response()->json([
+            'success' => $return['success'],
+            'message' => $return['message'],
+            'data' =>    $return['data'],
+        ], $return['code']);
     }
 
     public function createWriter(Request $request): JsonResponse
@@ -154,6 +172,7 @@ class StorageController extends Controller
         }
         return $this->onError(401, 'Unauthorized Access');
     }
+
     public function createSubscriber(Request $request): JsonResponse
     {
         $user = $request->user();
@@ -174,7 +193,7 @@ class StorageController extends Controller
         }
         return $this->onError(401, 'Unauthorized Access');
     }
-    public function deleteUser(Request $request, $id): JsonResponse
+    public function deleteUser_(Request $request, $id): JsonResponse
     {
         $user = $request->user();
         if ($this->isAdmin($user)) {
