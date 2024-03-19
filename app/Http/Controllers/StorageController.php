@@ -5,12 +5,15 @@ namespace App\Http\Controllers;
 use App\Http\Lib\ApiHelpers;
 use App\Models\Storage;
 use App\Models\User;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Str;
+
+use App\Services\UserService;
 
 use Illuminate\Support\Facades\Log;
 
@@ -22,11 +25,13 @@ class StorageController extends Controller
         if ($this->isAdmin($request->user())) {
 //            $storage = DB::table('storages')->get();
 //            $storage = Storage::paginate($request->rows)->orderBy('id', 'desc');
-            Log::notice(print_r($request->all(), 1));
+            Log::notice("[".__METHOD__."]< ".print_r($request->all(), 1));
             $storage = DB::table('storages')
                 ->when(!empty($request->search), function($query){
                     return $query->where('name', 'like', '%'.request()->search.'%')
                         ->orWhere('phone', 'like', '%'.request()->search.'%')
+                        ->orWhere('article', 'like', '%'.request()->search.'%')
+                        ->orWhere('storage_time', 'like', '%'.request()->search.'%')
                         ->orWhere('car_info', 'like', '%'.request()->search.'%');
                 })
                 ->orderBy(
@@ -52,23 +57,30 @@ class StorageController extends Controller
     }
     public function createStorage(Request $request): JsonResponse
     {
+        Log::notice("[".__METHOD__."] ".print_r($request->all(), 1));
         $user = $request->user();
         if ($this->isAdmin($user) || $this->isWriter($user)) {
             $validator = Validator::make($request->all(), $this->storageValidationRules());
             if ($validator->passes()) {
                 // Создание нового сообщения
-                $storage = new Storage();
-                $storage->name = $request->input('name');
-                $storage->name_alt = $request->input('name') ?? 'aaaa';
-//                $storage->slug = Str::slug($request->input('title'));
-                $storage->phone = $request->input('phone');
-                $storage->car_info = $request->input('car_info') ?? '?';
-                $storage->storage_time = $request->input('storage_time') ?? '2022-01-01';
-                $storage->sum = $request->input('sum') ?? 0;
-                $storage->descr_category = $request->input('descr_category') ?? '';
-                $storage->descr_name = $request->input('descr_name') ?? '';
-                $storage->descr_amount = $request->input('descr_amount') ?? 0;
-                $storage->save();
+
+                $storage= Storage::create($request->all());
+
+//                $storage = new Storage();
+//                $storage->name = $request->input('name');
+//                $storage->name_alt = $request->input('name') ?? 'aaaa';
+////                $storage->slug = Str::slug($request->input('title'));
+//                $storage->phone = $request->input('phone');
+//                $storage->car_info = $request->input('car_info') ?? '?';
+//                $storage->storage_time = $request->input('storage_time') ?? '2022-01-01';
+//                $storage->sum = $request->input('sum') ?? 0;
+//                $storage->descr_category = $request->input('descr_category') ?? '';
+//                $storage->descr_name = $request->input('descr_name') ?? '';
+//                $storage->descr_amount = $request->input('descr_amount') ?? 0;
+
+//                $storage->fill($request->all());
+//                $storage->save();
+
                 return $this->onSuccess($storage, 'Storage Created');
             }
             return $this->onError(400, $validator->errors());
@@ -83,11 +95,11 @@ class StorageController extends Controller
             if ($validator->passes()) {
                 // Обновление сообщения
                 $storage = Storage::find($id);
-                $storage->title = $request->input('title');
-                $storage->content = $request->input('content');
+                $storage->fill($request->all());
                 $storage->save();
                 return $this->onSuccess($storage, 'Storage Updated');
             }
+            Log::notice("[".__METHOD__."] ".print_r($request->all(), 1));
             return $this->onError(400, $validator->errors());
         }
         return $this->onError(401, 'Unauthorized Access');
@@ -105,6 +117,41 @@ class StorageController extends Controller
         }
         return $this->onError(401, 'Unauthorized Access');
     }
+
+    public function pdfStorage(Request $request, $id)
+    {
+        $user = $request->user();
+        if ($user) {
+            $storage = Storage::find($id); // Найдем id сообщения
+
+            if (!empty($storage)) {
+                $pdf = PDF::loadView('blank', compact('id', 'storage'));
+                return $pdf->stream('invoice.pdf');
+            }
+            return $this->onError(404, 'Storage Not Found');
+        }
+        return $this->onError(401, 'Unauthorized Access');
+    }
+
+    public function createUser(Request $request, UserService $serviceUser): JsonResponse
+    {
+        $return= $serviceUser->create($request);
+        return response()->json([
+            'success' => $return['success'],
+            'message' => $return['message'],
+            'data' =>    $return['data'],
+        ], $return['code']);
+    }
+    public function deleteUser(Request $request, $id, UserService $serviceUser): JsonResponse
+    {
+        $return= $serviceUser->delete($request, $id);
+        return response()->json([
+            'success' => $return['success'],
+            'message' => $return['message'],
+            'data' =>    $return['data'],
+        ], $return['code']);
+    }
+
     public function createWriter(Request $request): JsonResponse
     {
         $user = $request->user();
@@ -125,6 +172,7 @@ class StorageController extends Controller
         }
         return $this->onError(401, 'Unauthorized Access');
     }
+
     public function createSubscriber(Request $request): JsonResponse
     {
         $user = $request->user();
@@ -145,7 +193,7 @@ class StorageController extends Controller
         }
         return $this->onError(401, 'Unauthorized Access');
     }
-    public function deleteUser(Request $request, $id): JsonResponse
+    public function deleteUser_(Request $request, $id): JsonResponse
     {
         $user = $request->user();
         if ($this->isAdmin($user)) {

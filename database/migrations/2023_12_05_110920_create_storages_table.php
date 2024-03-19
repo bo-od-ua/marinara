@@ -15,17 +15,19 @@ class CreateStoragesTable extends Migration
     {
         Schema::create('storages', function (Blueprint $table) {
             $table->id();
+            $table->integer('article')->nullable();
             $table->string('name');
             $table->string('name_alt')->nullable();
             $table->string('phone');
             $table->string('phone_alt')->nullable();
-            $table->string('car_info');
+            $table->string('car_info')->nullable();
             $table->date('storage_time')->nullable();
-            $table->string('sum');
-            $table->string('descr_category');
-            $table->string('descr_name');
+            $table->string('price')->nullable();
+            $table->integer('paid')->default(0);
+            $table->string('descr_category')->nullable();
+            $table->string('descr_name')->nullable();
             $table->string('descr_notise')->nullable();
-            $table->string('descr_amount');
+            $table->string('descr_amount')->default(0);
             $table->timestamps();
         });
     }
