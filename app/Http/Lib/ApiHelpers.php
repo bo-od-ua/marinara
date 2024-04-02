@@ -14,6 +14,16 @@ trait ApiHelpers
         return false;
     }
 
+    protected function isUser($user): bool
+    {
+
+        if (!empty($user)) {
+            return $user->tokenCan('writer') || $user->tokenCan('subscriber');
+        }
+
+        return false;
+    }
+
     protected function isWriter($user): bool
     {
 

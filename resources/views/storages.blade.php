@@ -50,10 +50,10 @@
 				</thead>
 			</table>
 			<div id="storages_list-toolbar" style="padding:3px">
+@if (Auth::user()->role< 3)
 				<a href="javascript:void(0)" class="easyui-linkbutton" onclick="storagesEdit();" data-options="iconCls:'icon-add',plain:true">add</a>
-<!--				<a href="javascript:void(0)" class="easyui-linkbutton" onclick="foo()" data-options="iconCls:'icon-save',plain:true,disabled:true">save</a> -->
 				<a id="storages_list-button_del" href="javascript:void(0)" class="easyui-linkbutton" onclick="storagesDel();" data-options="iconCls:'icon-remove',plain:true,disabled:true">remove</a>
-
+@endif
 				<span style="float:right">
 					<input id="storages_search" class="search_input" data-controller="storages" style="width:200px;"
 					data-options="
@@ -93,7 +93,9 @@
 					" style="width:100%;">
 			</table>
 			<div id="storages_item-toolbar" style="padding:3px">
+@if (Auth::user()->role< 3)
 				<a id="storages_item-button_save" href="javascript:void(0)" class="easyui-linkbutton" onclick="storagesSave();" data-options="iconCls:'icon-save',plain:true,disabled:true" data-id="0">save</a>
+@endif
 				<a href="javascript:void(0)" class="easyui-linkbutton" onclick="storagesPDF();" data-options="iconCls:'icon-print',plain:true">print</a>
 			</div>
 		</div>

@@ -1,5 +1,6 @@
 	<div class="easyui-layout" style="width:100%;height:100%;">
 		<div data-options="region:'west'" style="width:40%;">
+@if (Auth::user()->role< 2)
 			<table id="users_list" class="easyui-datagrid" title=""
 					data-options="
 						url:'/api/users',  // 'storage.json'
@@ -30,8 +31,10 @@
                                     let bearer= $('#userBearer').val();
                                     xhr.setRequestHeader('Authorization', 'Bearer '+ bearer);
                                 },
-                                success: function(data){ success(data); },
-                                error: function(){ error.apply(this, arguments); }
+                                success: function(data){ success(data);},
+                                error: function(){
+                                    error.apply(this, arguments);
+                                }
                             });
                         },
                         loadFilter: function(data){
@@ -51,7 +54,7 @@
 			<div id="users_list-toolbar" style="padding:3px">
 				<a href="javascript:void(0)" class="easyui-linkbutton" onclick="usersEdit()" data-options="iconCls:'icon-add',plain:true">add</a>
 <!--				<a href="javascript:void(0)" class="easyui-linkbutton" onclick="foo()" data-options="iconCls:'icon-save',plain:true,disabled:true">save</a> -->
-				<a href="javascript:void(0)" class="easyui-linkbutton" onclick="foo()" data-options="iconCls:'icon-remove',plain:true,disabled:true">remove</a>
+				<a id="users_list-button_del" href="javascript:void(0)" class="easyui-linkbutton" onclick="usersDel()" data-options="iconCls:'icon-remove',plain:true,disabled:true">remove</a>
 
 				<span style="float:right">
 					<input id="users_search" class="search_input" data-controller="users" style="width:200px;"
@@ -69,8 +72,7 @@
 		</div>
 		<div data-options="region:'center'" style="width:60%;">
 			<table id="users_item" class="easyui-propertygrid" data-options="
-						url:'user_item.json',
-						method:'get',
+
 						showGroup:true,
 						scrollbarSize:0,
 						showHeader:false,
@@ -80,12 +82,14 @@
 						toolbar:'#users_item-toolbar',
 						onEndEdit: function(index,row){
 							$('#users_item-button_save').linkbutton('enable');
-							console.log(row);
 						}
 					" style="width:100%;">
 			</table>
 			<div id="users_item-toolbar" style="padding:3px">
-				<a id="users_item-button_save" href="javascript:void(0)" class="easyui-linkbutton" onclick="foo()" data-options="iconCls:'icon-save',plain:true,disabled:true">save</a>
+				<a id="users_item-button_save" href="javascript:void(0)" class="easyui-linkbutton" onclick="usersSave()" data-options="iconCls:'icon-save',plain:true,disabled:true">save</a>
 			</div>
+@else
+                Unauthorized Access
+@endif
 		</div>
 	</div>

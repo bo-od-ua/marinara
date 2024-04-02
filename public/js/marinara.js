@@ -188,7 +188,7 @@ function users2Back(data= {}){
     let row= {};
     let comparison= {
         "ПІБ": 'name',
-        "Нотатки": 'notise',
+        "Нотатки": 'notice',
         "Администратор": 'role',
         "email": 'email',
         "password": 'password',
@@ -200,7 +200,7 @@ function users2Back(data= {}){
         row[k]= data.rows[i].value;
     }
 
-    row.role=(row.role== true)? 2: 3;
+    row.role= (row.role)? 2: 3;
 
     return row;
 }
@@ -224,12 +224,11 @@ function storagesAcessor(row, data= {}){
     return data;
 }
 function usersAcessor(row, data= {}){
-    console.log(row);
     data[0].value=   row.name;
     data[1].value=   row.email;
     data[2].value=   '';
     data[3].value=   (row.role== '1' || row.role== '2')? true: false;
-    data[4].value=   row.notise;
+    data[4].value=   row.notice;
 
     return data;
 }
@@ -267,7 +266,7 @@ function storagesGet(id= 0, data= ''){
         $("#storages_item").propertygrid('loadData', data);
     }
 
-    console.log(data);
+//    console.log(data);
 }
 
 function storagesDel(){
@@ -362,6 +361,32 @@ function storagesPDF(){
         $.messager.alert('error','запись не выбрана.','error');
     }
 }
+
+function usersDel(){
+    row = $('#users_list').datagrid('getSelected');
+    if(row){
+        $.ajax({
+            type: 'delete',
+            url: '/api/users/'+ row.id,
+            dataType: 'json',
+            beforeSend: function (xhr) {
+                let bearer= $('#userBearer').val();
+                xhr.setRequestHeader('Authorization', 'Bearer '+ bearer);
+            },
+            success: function(response){
+                $.messager.alert('success', messageDecode(response.message),'info');
+                usersEdit();
+                search('users');
+            },
+            error: function(jqXHR, textStatus, errorThrown){
+                messageError(jqXHR, textStatus, errorThrown);
+            },
+        });
+    }
+    else{
+        $.messager.alert('error','запись не выбрана.','error');
+    }
+}
 function usersGet(id= 0, data= ''){
     $("#users_item").propertygrid('loadData', []);
     $('#users_item-button_save').attr('data-id', 0);
@@ -410,7 +435,6 @@ function usersEdit(row= ''){
         data.rows[key] = usersData.rows[key];
     }
     data.total= data.rows.length;
-
     if(row){
         $('#users_list-button_del').linkbutton('enable');
         id = row.id;
@@ -430,32 +454,36 @@ function usersSave(){
     if(id) {
         method= 'put';
         url += '/'+ id;
-
-        $.ajax({
-            type: method,
-            url: url,
-            data: data,
-            dataType: 'json',
-            beforeSend: function (xhr) {
-                let bearer = $('#userBearer').val();
-                xhr.setRequestHeader('Authorization', 'Bearer ' + bearer);
-            },
-            complete: function(jqXHR, textStatus) {
-            },
-            success: function (response) {
-                console.log(response);
-                $('#users_list-button_del').linkbutton('disable');
-                $.messager.alert('success', messageDecode(response.message),'info');
-                search('users');
-            },
-            error: function(jqXHR, textStatus, errorThrown){
-                messageError(jqXHR, textStatus, errorThrown);
-            },
-        });
     }
     else{
-        $.messager.alert('error','запись не выбрана.','error');
+        data.password_confirmation= data.password;
     }
+
+    $.ajax({
+        type: method,
+        url: url,
+        data: data,
+        dataType: 'json',
+        beforeSend: function (xhr) {
+            let bearer = $('#userBearer').val();
+            xhr.setRequestHeader('Authorization', 'Bearer ' + bearer);
+        },
+        complete: function(jqXHR, textStatus) {
+        },
+        success: function (response) {
+            console.log(response);
+            $('#users_list-button_del').linkbutton('disable');
+            $.messager.alert('success', messageDecode(response.message),'info');
+            search('users');
+        },
+        error: function(jqXHR, textStatus, errorThrown){
+            messageError(jqXHR, textStatus, errorThrown);
+        },
+    });
+    //}
+    // else{
+    //     $.messager.alert('error','запись не выбрана.','error');
+    // }
 
 //    console.log(row);
 }

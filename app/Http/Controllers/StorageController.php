@@ -7,6 +7,7 @@ use App\Models\Storage;
 use App\Models\User;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -22,9 +23,7 @@ class StorageController extends Controller
     use ApiHelpers;
     public function storage(Request $request): JsonResponse
     {
-        if ($this->isAdmin($request->user())) {
-//            $storage = DB::table('storages')->get();
-//            $storage = Storage::paginate($request->rows)->orderBy('id', 'desc');
+        if (Auth::check()) {
             Log::notice("[".__METHOD__."]< ".print_r($request->all(), 1));
             $storage = DB::table('storages')
                 ->when(!empty($request->search), function($query){
@@ -41,12 +40,12 @@ class StorageController extends Controller
 
             return $this->onSuccess($storage, 'Storage Retrieved');
         }
-        return $this->onError(401, 'Unauthorized Access');
+        return $this->onError(403, 'Unauthorized Access');
     }
     public function singleStorage(Request $request, $id): JsonResponse
     {
         $user = $request->user();
-        if ($this->isAdmin($user) || $this->isWriter($user) || $this->isSubscriber($user)) {
+        if (Auth::check()) {
             $storage = DB::table('storages')->where('id', $id)->first();
             if (!empty($storage)) {
                 return $this->onSuccess($storage, 'Storage Retrieved');
@@ -65,21 +64,6 @@ class StorageController extends Controller
                 // Создание нового сообщения
 
                 $storage= Storage::create($request->all());
-
-//                $storage = new Storage();
-//                $storage->name = $request->input('name');
-//                $storage->name_alt = $request->input('name') ?? 'aaaa';
-////                $storage->slug = Str::slug($request->input('title'));
-//                $storage->phone = $request->input('phone');
-//                $storage->car_info = $request->input('car_info') ?? '?';
-//                $storage->storage_time = $request->input('storage_time') ?? '2022-01-01';
-//                $storage->sum = $request->input('sum') ?? 0;
-//                $storage->descr_category = $request->input('descr_category') ?? '';
-//                $storage->descr_name = $request->input('descr_name') ?? '';
-//                $storage->descr_amount = $request->input('descr_amount') ?? 0;
-
-//                $storage->fill($request->all());
-//                $storage->save();
 
                 return $this->onSuccess($storage, 'Storage Created');
             }
@@ -129,82 +113,6 @@ class StorageController extends Controller
                 return $pdf->stream('invoice.pdf');
             }
             return $this->onError(404, 'Storage Not Found');
-        }
-        return $this->onError(401, 'Unauthorized Access');
-    }
-
-    public function createUser(Request $request, UserService $serviceUser): JsonResponse
-    {
-        $return= $serviceUser->create($request);
-        return response()->json([
-            'success' => $return['success'],
-            'message' => $return['message'],
-            'data' =>    $return['data'],
-        ], $return['code']);
-    }
-    public function deleteUser(Request $request, $id, UserService $serviceUser): JsonResponse
-    {
-        $return= $serviceUser->delete($request, $id);
-        return response()->json([
-            'success' => $return['success'],
-            'message' => $return['message'],
-            'data' =>    $return['data'],
-        ], $return['code']);
-    }
-
-    public function createWriter(Request $request): JsonResponse
-    {
-        $user = $request->user();
-        if ($this->isAdmin($user)) {
-            $validator = Validator::make($request->all(), $this->userValidatedRules());
-            if ($validator->passes()) {
-                // Создаем нового Автора
-                User::create([
-                    'name' => $request->input('name'),
-                    'email' => $request->input('email'),
-                    'role' => 2,
-                    'password' => Hash::make($request->input('password')),
-                ]);
-                $writerToken = $user->createToken('auth_token', ['writer'])->plainTextToken;
-                return $this->onSuccess($writerToken, 'User Created With Writer Privilege');
-            }
-            return $this->onError(400, $validator->errors());
-        }
-        return $this->onError(401, 'Unauthorized Access');
-    }
-
-    public function createSubscriber(Request $request): JsonResponse
-    {
-        $user = $request->user();
-        if ($this->isAdmin($user)) {
-            $validator = Validator::make($request->all(), $this->userValidatedRules());
-            if ($validator->passes()) {
-                // Создаем нового Подписчика
-                User::create([
-                    'name' => $request->input('name'),
-                    'email' => $request->input('email'),
-                    'role' => 3,
-                    'password' => Hash::make($request->input('password')),
-                ]);
-                $writerToken = $user->createToken('auth_token', ['subscriber'])->plainTextToken;
-                return $this->onSuccess($writerToken, 'User Created With Subscriber Privilege');
-            }
-            return $this->onError(400, $validator->errors());
-        }
-        return $this->onError(401, 'Unauthorized Access');
-    }
-    public function deleteUser_(Request $request, $id): JsonResponse
-    {
-        $user = $request->user();
-        if ($this->isAdmin($user)) {
-            $user = User::find($id); // Найдем id пользователя
-            if ($user->role !== 1) {
-                $user->delete(); // Удалим указанного пользователя
-                if (!empty($user)) {
-                    return $this->onSuccess('', 'User Deleted');
-                }
-                return $this->onError(404, 'User Not Found');
-            }
         }
         return $this->onError(401, 'Unauthorized Access');
     }

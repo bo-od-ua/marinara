@@ -1,3 +1,4 @@
+/stats
 /node_modules
 /public/hot
 /public/storage
@@ -15,3 +16,4 @@ yarn-error.log
 /.idea
 /.vscode
 /.00
+/stats

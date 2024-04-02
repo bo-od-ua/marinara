@@ -30,18 +30,29 @@ Route::middleware(['auth'])->group(function () {
     Route::get('storages', function () { return view('storages'); });
     Route::get('storages/pdf/{id}', [StorageController::class, 'pdfStorage']);
 
-    Route::get('dashboard', function () {
-        if(Auth::check() && Auth::user()->role === 1){
+    Route::get('token/create', function () {  //Route::get('dashboard', function () {
+        if(Auth::check()){
+            $role= [1=> 'admin', 2=> 'writer', 3=> 'subscriber'];
             return auth()
                 ->user()
-                ->createToken('auth_token', ['admin'])
+                ->createToken('auth_token', [$role[Auth::user()->role]])
                 ->plainTextToken;
         }
         return redirect("/");
     });
 
-    Route::get('clear/token', function () {
-        if(Auth::check() && Auth::user()->role === 1) {
+//    Route::get('token/create', function () {  //Route::get('dashboard', function () {
+//        if(Auth::check() && Auth::user()->role === 1){
+//            return auth()
+//                ->user()
+//                ->createToken('auth_token', ['admin'])
+//                ->plainTextToken;
+//        }
+//        return redirect("/");
+//    });
+
+    Route::get('token/clear', function () {
+        if(Auth::check()) { //if(Auth::check() && Auth::user()->role === 1) {
             Auth::user()->tokens()->delete();
         }
         return 'Token Cleared';

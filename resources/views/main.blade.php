@@ -25,9 +25,11 @@
             <div title="Резина" style="overflow:auto;padding:10px;">
                 <a href="javascript:void(0)" onclick="mainTabAdd('storages')">хранение</a>
             </div>
+@if (Auth::user()->role< 2)
             <div title="настройки" style="overflow:auto;padding:10px;">
                 <a href="javascript:void(0)" onclick="mainTabAdd('users')">пользователи</a>
             </div>
+@endif
         </div>
 
     </div>

@@ -16,14 +16,13 @@ class UserService
 {
     use ApiHelpers;
 
-    protected $rolesAllowed= [2, 3];
-    protected $rolesAdmin=   [1, 2];
+    protected $rolesUsers=   [2=> 'writer', 3=> 'subscriber'];
+    protected $rolesWriters= [1, 2];
 
     public function list(Request $request): object
     {
         $user = $request->user();
         if ($this->isAdmin($user) || $this->isWriter($user)) {
-            Log::notice("[".__METHOD__."]< ".print_r($request->all(), 1));
             $users = DB::table('users')
                 ->when(!empty($request->search), function($query){
                     return $query->where('name', 'like', '%'.request()->search.'%')
@@ -53,21 +52,49 @@ class UserService
     public function create(Request $request): object
     {
         $role= 3;
-        $user = $request->user();
-        if ($this->isAdmin($user)) {
-            $validator = Validator::make($request->all(), $this->validatedRules());
+        $editor = $request->user();
+        if ($this->isAdmin($editor)) {
+            $validator= $this->validator($request);
             if ($validator->passes()) {
-                if(in_array((int)$request->input('role'), $this->rolesAllowed)) $role= (int)$request->input('role');
+                if($this->rolesUsers[(int)$request->input('role')]) $role= (int)$request->input('role');
 
-                User::create([
+                $user= User::create([
                     'name' => $request->input('name'),
                     'email' => $request->input('email'),
+                    'notice' => $request->input('notice'),
                     'role' => $role,
                     'password' => Hash::make($request->input('password')),
                 ]);
-                $writerToken = $user->createToken('auth_token', ['subscriber'])->plainTextToken;
-                return (object)['success'=> 1, 'code'=> 200, 'message'=> 'User Created With Subscriber Privilege', 'data' => $writerToken];
+                $writerToken = $user->createToken('auth_token', [$this->rolesUsers[$role]])->plainTextToken;
+                $user->bearer= $writerToken;
+                $user->save();
+                Log::notice("[".__METHOD__."]< ".print_r($request->all(), 1)."\n".$writerToken);
+                return (object)['success'=> 1, 'code'=> 200, 'message'=> 'User Created With '.$this->rolesUsers[$role].' Privilege', 'data' => $writerToken];
             }
+            return (object)['success'=> 0, 'code'=> 400, 'message'=> $validator->errors(), 'data' => []];
+        }
+        return (object)['success'=> 0, 'code'=> 401, 'message'=> 'Unauthorized Access', 'data' => []];
+    }
+
+    public function update(Request $request, $id): object
+    {
+        $editor = $request->user();
+        if ($this->isAdmin($editor)) {
+            $user = User::find($id);
+
+            $validator= $this->validator($request, $user);
+            if ($validator->passes()) {
+                if($request->input('password')){
+                    $request->merge(['password'=> Hash::make($request->password)]);
+                    $user->update($request->all());
+                }
+                else{
+                    $user->update($request->except('password'));
+                }
+                Log::notice("[".__METHOD__."]< ".print_r($request->all(), 1));
+                return (object)['success'=> 1, 'code'=> 200, 'message'=> 'User Updated', 'data' => []];
+            }
+
             return (object)['success'=> 0, 'code'=> 400, 'message'=> $validator->errors(), 'data' => []];
         }
         return (object)['success'=> 0, 'code'=> 401, 'message'=> 'Unauthorized Access', 'data' => []];
@@ -76,7 +103,7 @@ class UserService
     public function delete(Request $request, $id): object
     {
         $user = $request->user();
-        if ($this->isAdmin($user) || $this->isWriter($user)) {
+        if ($this->isAdmin($user)) {
             $user = User::find($id); // Найдем id пользователя
             if ($user->role !== 1) {
                 $user->delete(); // Удалим указанного пользователя
@@ -88,12 +115,20 @@ class UserService
         }
         return (object)['success'=> 0, 'code'=> 401, 'message'=> 'Unauthorized Access', 'data' => []];
     }
-    protected function validatedRules(): array
+
+    protected function validator(Request $request, $user= '')
     {
-        return [
+        $rules= [
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
         ];
+
+        if($user){
+            if($user->email== $request->input('email')) unset($rules['email']);
+            if(!$request->input('password')) unset($rules['password']);
+        }
+
+        return Validator::make($request->all(), $rules);
     }
 }

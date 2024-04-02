@@ -95,9 +95,15 @@ class UserController extends Controller
      * @param  \App\Models\User  $user
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, User $user)
+    public function update(Request $request, $id, UserService $serviceUser): JsonResponse
     {
-        //
+        $return= $serviceUser->update($request, $id);
+        return response()->json([
+            'success' => $return->success,
+            'message' => $return->message,
+            'data' =>    $return->data,
+            'code' =>    $return->code,
+        ], $return->code);
     }
 
     /**
