@@ -105,18 +105,26 @@ $styleID= 'font-size:95px;font-weight:bold;';
 <table style="width:100%;text-align:center;padding:5px;">
 	<tr>
 		<td style="border: 1px dashed #000000;">
-			<span style="{{$styleID}}">{{$storage->article}}</span>
+            {{$storage->name}}, {{$storage->phone}}
+			<div style="{{$styleID}}">{{$storage->article}}</div>
+            {{$storage->storage_time}}
 		</td>
         <td style="border: 1px dashed #000000;">
-            <span style="{{$styleID}}">{{$storage->article}}</span>
+            {{$storage->name}}, {{$storage->phone}}
+            <div style="{{$styleID}}">{{$storage->article}}</div>
+            {{$storage->storage_time}}
         </td>
 	</tr>
 	<tr>
 		<td style="border: 1px dashed #000000;">
-			<span style="{{$styleID}}">{{$storage->article}}</span>
+            {{$storage->name}}, {{$storage->phone}}
+            <div style="{{$styleID}}">{{$storage->article}}</div>
+            {{$storage->storage_time}}
 		</td>
         <td style="border: 1px dashed #000000;">
-            <span style="{{$styleID}}">{{$storage->article}}</span>
+            {{$storage->name}}, {{$storage->phone}}
+            <div style="{{$styleID}}">{{$storage->article}}</div>
+            {{$storage->storage_time}}
         </td>
 	</tr>
 </table>

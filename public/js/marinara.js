@@ -480,12 +480,6 @@ function usersSave(){
             messageError(jqXHR, textStatus, errorThrown);
         },
     });
-    //}
-    // else{
-    //     $.messager.alert('error','запись не выбрана.','error');
-    // }
-
-//    console.log(row);
 }
 
 function messageError(jqXHR, textStatus, errorThrown){

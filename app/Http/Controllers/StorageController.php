@@ -44,7 +44,6 @@ class StorageController extends Controller
     }
     public function singleStorage(Request $request, $id): JsonResponse
     {
-        $user = $request->user();
         if (Auth::check()) {
             $storage = DB::table('storages')->where('id', $id)->first();
             if (!empty($storage)) {
