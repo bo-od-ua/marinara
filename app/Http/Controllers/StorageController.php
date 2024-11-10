@@ -24,11 +24,12 @@ class StorageController extends Controller
     public function storage(Request $request): JsonResponse
     {
         if (Auth::check()) {
-            Log::notice("[".__METHOD__."]< ".print_r($request->all(), 1));
             $storage = DB::table('storages')
                 ->when(!empty($request->search), function($query){
                     return $query->where('name', 'like', '%'.request()->search.'%')
+												->orWhere('name_alt', 'like', '%'.request()->search.'%')
                         ->orWhere('phone', 'like', '%'.request()->search.'%')
+												->orWhere('phone_alt', 'like', '%'.request()->search.'%')
                         ->orWhere('article', 'like', '%'.request()->search.'%')
                         ->orWhere('storage_time', 'like', '%'.request()->search.'%')
                         ->orWhere('car_info', 'like', '%'.request()->search.'%');
