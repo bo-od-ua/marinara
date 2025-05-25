@@ -63,6 +63,13 @@ const storagesData= {
                 }
             }},
         {name:"К-сть",value:"0",group:"Опис",editor:"numberbox"},
+        {name:"Заметки",value:"","group":"Дополнительно",editor:{
+            type:"textbox",
+            options:{
+                multiline:true,
+                height:100
+            }
+        }},
     ]};
 
 $.extend($.fn.textbox.methods, {
@@ -166,6 +173,7 @@ function storages2Back(data= {}){
         "Найменування": 'descr_name',
         "Дод. інфо": 'descr_notise',
         "К-сть": 'descr_amount',
+				"Заметки": 'notise',
     };
 
     for (let i in data.rows) {
@@ -220,6 +228,7 @@ function storagesAcessor(row, data= {}){
     data[10].value=  row.descr_name;
     data[11].value=  row.descr_notise;
     data[12].value=  row.descr_amount;
+		data[13].value=  row.notise;
 
     return data;
 }

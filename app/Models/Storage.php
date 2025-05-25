@@ -22,6 +22,7 @@ class Storage extends Model
         'descr_name',
         'descr_notise',
         'descr_amount',
+				'notise',
     ];
 
     public function setPaid($value)

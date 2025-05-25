@@ -28,6 +28,7 @@ class CreateStoragesTable extends Migration
             $table->string('descr_name')->nullable();
             $table->string('descr_notise')->nullable();
             $table->string('descr_amount')->default(0);
+						$table->text('notise')->nullable(); 
             $table->timestamps();
         });
     }
