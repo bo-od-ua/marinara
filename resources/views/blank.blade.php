@@ -32,10 +32,10 @@ $styleID= 'font-size:95px;font-weight:bold;';
 	<tr>
 		<td style="border: 0px solid #000000;text-align:center;" colspan="2">
 			<b>АКТ ПРИЕМА-ПЕРЕДАЧИ №{{$storage->article}}</b>
-			<p style="padding-bottom:10px;">услуг по хранению</p>
+			<p style="padding-bottom:10px;">послуг зі зберігання</p>
 			<table style="width:100%;text-align:left;" cellspacing="0">
 				<tr>
-					<td style="{{$styleTDname}}">ФИО</td>
+					<td style="{{$styleTDname}}">ПІБ</td>
 					<td style="{{$styleTDvalue}}">{{$storage->name}}</td>
 				</tr>
 				<tr>
@@ -43,23 +43,23 @@ $styleID= 'font-size:95px;font-weight:bold;';
 					<td style="{{$styleTDvalue}}">{{$storage->phone}}</td>
 				</tr>
 				<tr>
-					<td style="{{$styleTDname}}">машина</td>
+					<td style="{{$styleTDname}}">авто</td>
 					<td style="{{$styleTDvalue}}">{{$storage->car_info}}</td>
 				</tr>
 				<tr>
-					<td style="{{$styleTDname}}">доп. ФИО</td>
+					<td style="{{$styleTDname}}">дод. ПІБ</td>
 					<td style="{{$styleTDvalue}}">{{$storage->name_alt}}</td>
 				</tr>
 				<tr>
-					<td style="{{$styleTDname}}">доп. телефон</td>
+					<td style="{{$styleTDname}}">дод. телефон</td>
 					<td style="{{$styleTDvalue}}">{{$storage->phone_alt}}</td>
 				</tr>
 				<tr>
-					<td style="{{$styleTDname}}">срок хранения</td>
+					<td style="{{$styleTDname}}">термін зберігання</td>
 					<td style="{{$styleTDvalue}}">{{$storage->storage_time}}</td>
 				</tr>
 				<tr>
-					<td style="{{$styleTDname}}">сумма</td>
+					<td style="{{$styleTDname}}">сума</td>
 					<td style="{{$styleTDvalue}}">{{$storage->price}}</td>
 				</tr>
 			</table>
@@ -67,13 +67,13 @@ $styleID= 'font-size:95px;font-weight:bold;';
 	</tr>
 	<tr>
 		<td style="border: 0px solid #000000;padding:5px;" colspan="2">
-			<b>описание</b>
+			<b>опис</b>
 			<table style="width:100%;" cellspacing="0">
 				<tr>
-					<td style="border: 1px solid #000000;padding:10px;">категория</td>
-					<td style="border: 1px solid #000000;padding:10px;">наименование</td>
-					<td style="border: 1px solid #000000;padding:10px;">доп. инфо</td>
-					<td style="border: 1px solid #000000;padding:10px;">кол-во</td>
+					<td style="border: 1px solid #000000;padding:10px;">категорія</td>
+					<td style="border: 1px solid #000000;padding:10px;">найменування</td>
+					<td style="border: 1px solid #000000;padding:10px;">дод. інфо</td>
+					<td style="border: 1px solid #000000;padding:10px;">к-сть</td>
 				</tr>
 				<tr>
 					<td style="border: 1px solid #000000;padding:10px;width:20%">{{$storage->descr_category}}</td>
