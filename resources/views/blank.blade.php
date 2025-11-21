@@ -24,14 +24,14 @@ $styleID= 'font-size:95px;font-weight:bold;';
 			<img src="{{public_path().'/logo.png'}}">
 		</td>
 		<td style="border: 0px solid #000000;text-align:center;">
-			Шинный центр<br>
-			ул. Люстдорфская дорога 121/1а<br>
+			Шинний центр<br>
+			вул. Люстдорфська дорога 121/1а<br>
 			тел. (097) 217-63-61<br>
 		</td>
 	</tr>
 	<tr>
 		<td style="border: 0px solid #000000;text-align:center;" colspan="2">
-			<b>АКТ ПРИЕМА-ПЕРЕДАЧИ №{{$storage->article}}</b>
+			<b>АКТ ПРИЙОМУ-ПЕРЕДАЧІ №{{$storage->article}}</b>
 			<p style="padding-bottom:10px;">послуг зі зберігання</p>
 			<table style="width:100%;text-align:left;" cellspacing="0">
 				<tr>
